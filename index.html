@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Countdown</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+    background:
+        radial-gradient(circle at top left, #fff4c7 0%, transparent 35%),
+        radial-gradient(circle at bottom right, #ffe0f0 0%, transparent 35%),
+        linear-gradient(135deg, #ffb347, #ffcc70, #ffdeda);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.sparkle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: .25;
+    animation: float 12s infinite linear;
+}
+
+@keyframes float {
+    from {
+        transform: translateY(100vh);
+    }
+    to {
+        transform: translateY(-120vh);
+    }
+}
+
+.container {
+    background: rgba(255,255,255,0.20);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.35);
+    box-shadow:
+        0 20px 50px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+    border-radius: 30px;
+    padding: 3rem;
+    width: min(95%, 1000px);
+    text-align: center;
+}
+
+h1 {
+    color: #6a456f;
+    font-size: clamp(2rem, 5vw, 4rem);
+    margin-bottom: .5rem;
+}
+
+.subtitle {
+    color: #82557c;
+    margin-bottom: 2rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+.countdown {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 20px;
+}
+
+.time-box {
+    background: rgba(255,255,255,0.55);
+    border-radius: 22px;
+    padding: 1.5rem 1rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.number {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    color: #d45b79;
+}
+
+.label {
+    margin-top: .25rem;
+    color: #6b5870;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: .8rem;
+}
+
+.message {
+    margin-top: 2rem;
+    color: #704f67;
+    font-size: 1rem;
+}
+
+.footer {
+    margin-top: 1.5rem;
+    opacity: .65;
+    font-size: .85rem;
+    color: #6b5870;
+}
+</style>
+</head>
+<body>
+
+<div id="sparkles"></div>
+
+<div class="container">
+    <h1>✨ A New Chapter ✨</h1>
+    <div class="subtitle">Every day brings it closer</div>
+
+    <div class="countdown">
+        <div class="time-box">
+            <div class="number" id="weeks">0</div>
+            <div class="label">Weeks</div>
+        </div>
+
+        <div class="time-box">
+            <div class="number" id="days">0</div>
+            <div class="label">Days</div>
+        </div>
+
+        <div class="time-box">
+            <div class="number" id="hours">0</div>
+            <div class="label">Hours</div>
+        </div>
+
+        <div class="time-box">
+            <div class="number" id="minutes">0</div>
+            <div class="label">Minutes</div>
+        </div>
+
+        <div class="time-box">
+            <div class="number" id="seconds">0</div>
+            <div class="label">Seconds</div>
+        </div>
+    </div>
+
+    <div class="message">
+        🌸 The next adventure gets closer every moment 🌸
+    </div>
+
+    <div class="footer">
+        Keep smiling. Great things are ahead.
+    </div>
+</div>
+
+<script>
+// End of July 2nd 2027 (11:59:59 PM local time)
+const targetDate = new Date("July 2, 2027 23:59:59").getTime();
+
+function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    if (distance <= 0) {
+        document.body.innerHTML = `
+            <div style="
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                height:100vh;
+                font-family:Poppins,sans-serif;
+                text-align:center;
+                background:linear-gradient(135deg,#ffd166,#ffb347,#ffd6e8);
+            ">
+                <div>
+                    <h1>🎉 The Day Has Arrived! 🎉</h1>
+                    <p>Enjoy every moment of this exciting new chapter.</p>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    const totalDays = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const weeks = Math.floor(totalDays / 7);
+    const days = totalDays % 7;
+
+    const hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
+    const minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
+    const seconds = Math.floor((distance % (1000*60)) / 1000);
+
+    document.getElementById("weeks").textContent = weeks;
+    document.getElementById("days").textContent = days;
+    document.getElementById("hours").textContent = hours;
+    document.getElementById("minutes").textContent = minutes;
+    document.getElementById("seconds").textContent = seconds;
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+// Decorative sparkles
+for(let i = 0; i < 40; i++) {
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.style.width = s.style.height = (Math.random() * 8 + 3) + "px";
+    s.style.left = Math.random() * 100 + "%";
+    s.style.background = ["#fff","#ffec99","#ffd6e8","#ffffff"][Math.floor(Math.random()*4)];
+    s.style.animationDuration = (Math.random() * 10 + 8) + "s";
+    s.style.animationDelay = Math.random() * 10 + "s";
+    document.body.appendChild(s);
+}
+</script>
+
+</body>
+</html>
